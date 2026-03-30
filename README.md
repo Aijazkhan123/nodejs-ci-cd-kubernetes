@@ -1,106 +1,131 @@
-# 🚀 Production-Ready CI/CD Pipeline with Kubernetes (Node.js)
+# ☸️ Node.js CI/CD with Kubernetes
 
-![CI](https://github.com/Aijazkhan123/nodejs-ci-cd-kubernetes/actions/workflows/main.yml/badge.svg)
-![Docker](https://img.shields.io/badge/docker-ready-blue)
-![Kubernetes](https://img.shields.io/badge/kubernetes-deployed-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
+[![Node.js](https://img.shields.io/badge/Node.js-Runtime-339933?logo=node.js)](https://nodejs.org)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker)](https://docker.com)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-Orchestration-326CE5?logo=kubernetes)](https://kubernetes.io)
+[![GitHub Actions](https://img.shields.io/badge/GitHub%20Actions-CI%2FCD-2088FF?logo=githubactions)](https://github.com/features/actions)
 
----
-
-## 📌 Overview
-
-This project demonstrates an **end-to-end CI/CD pipeline** for a containerized Node.js application, deployed on Kubernetes. It reflects a **production-like DevOps workflow** where code changes automatically trigger build, test, and deployment stages.
-
-The goal of this project is to showcase hands-on expertise in **automation, containerization, and orchestration** using industry-standard tools.
+A production-grade Node.js application with a complete CI/CD pipeline and Kubernetes deployment configuration. This project demonstrates the full modern DevOps workflow — from code to automated container builds to Kubernetes-orchestrated deployment.
 
 ---
 
-## 🏗️ System Architecture
+## 🏗️ Architecture Diagram
 
 ```
-Developer → GitHub → GitHub Actions → DockerHub → Kubernetes Cluster
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         FULL DEVOPS PIPELINE                            │
+│                                                                         │
+│  👨‍💻 Developer                                                            │
+│      │  git push                                                        │
+│      ▼                                                                  │
+│  ┌──────────────┐                                                       │
+│  │  GitHub Repo │                                                       │
+│  └──────┬───────┘                                                       │
+│         │ triggers                                                      │
+│         ▼                                                               │
+│  ┌───────────────────────────────────────────────────────────────────┐ │
+│  │                  GitHub Actions CI/CD Workflow                    │ │
+│  │                                                                   │ │
+│  │  ┌──────────┐  ┌──────────┐  ┌──────────────┐  ┌─────────────┐  │ │
+│  │  │ Checkout │→ │  Install │→ │ Test & Lint  │→ │ Docker Build│  │ │
+│  │  │   Code   │  │   deps   │  │  (npm test)  │  │  & Push     │  │ │
+│  │  └──────────┘  └──────────┘  └──────────────┘  └──────┬──────┘  │ │
+│  │                                                        │         │ │
+│  │                                               ┌────────▼───────┐ │ │
+│  │                                               │  kubectl apply │ │ │
+│  │                                               │  (K8s deploy)  │ │ │
+│  │                                               └────────────────┘ │ │
+│  └───────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│                      KUBERNETES CLUSTER                                 │
+│                                                                         │
+│  ┌──────────────────────────────────────────────────────────────────┐  │
+│  │  Namespace: default (or custom)                                  │  │
+│  │                                                                  │  │
+│  │  ┌──────────────────────────────────────────────────────────┐   │  │
+│  │  │  Deployment                                              │   │  │
+│  │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐   │   │  │
+│  │  │  │   Pod #1     │  │   Pod #2     │  │   Pod #3     │   │   │  │
+│  │  │  │  Node.js App │  │  Node.js App │  │  Node.js App │   │   │  │
+│  │  │  │  :3000       │  │  :3000       │  │  :3000       │   │   │  │
+│  │  │  └──────────────┘  └──────────────┘  └──────────────┘   │   │  │
+│  │  └──────────────────────────────────────────────────────────┘   │  │
+│  │                              ▲                                   │  │
+│  │                              │ routes traffic                    │  │
+│  │  ┌───────────────────────────┴──────────────────────────────┐   │  │
+│  │  │  Service (LoadBalancer / NodePort)                       │   │  │
+│  │  │  External Port → Internal :3000                          │   │  │
+│  │  └──────────────────────────────────────────────────────────┘   │  │
+│  └──────────────────────────────────────────────────────────────────┘  │
+│                              ▲                                          │
+│         🌐 Internet / curl / Browser                                    │
+└─────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **Continuous Integration (CI):** Automated build and Docker image creation
-* **Continuous Deployment (CD):** Automatic rollout to Kubernetes cluster
-* **Container Registry:** DockerHub stores versioned images
+---
+
+## 📁 Project Structure
+
+```
+nodejs-ci-cd-kubernetes/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml       # GitHub Actions pipeline
+├── k8s/
+│   ├── deployment.yaml     # Kubernetes Deployment manifest
+│   └── service.yaml        # Kubernetes Service manifest
+├── app.js                  # Node.js application entry point
+├── package.json            # Node.js dependencies and scripts
+└── Dockerfile              # Container image definition
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Category         | Tools Used                   |
-| ---------------- | ---------------------------- |
-| Application      | Node.js (Express)            |
-| CI/CD            | GitHub Actions               |
-| Containerization | Docker                       |
-| Orchestration    | Kubernetes (Kind / Minikube) |
-| Registry         | DockerHub                    |
-| Version Control  | Git & GitHub                 |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Application | Node.js + JavaScript | Backend API / web server |
+| Containerization | Docker | Package the application |
+| Orchestration | Kubernetes | Scale, manage, and deploy containers |
+| CI/CD | GitHub Actions | Automate build → test → deploy |
+| Registry | Docker Hub / GHCR | Store container images |
 
 ---
 
-## ⚙️ Key Features
+## ⚡ Getting Started
 
-* ✅ Fully automated CI/CD pipeline
-* ✅ Docker image build & push on every commit
-* ✅ Kubernetes-based deployment with rolling updates
-* ✅ Scalable and cloud-native architecture
-* ✅ Clean separation of CI and CD stages
-
----
-
-## 🔄 CI/CD Workflow
-
-1. Developer pushes code to GitHub
-2. GitHub Actions workflow is triggered
-3. Application is built and tested
-4. Docker image is created and pushed to DockerHub
-5. Kubernetes deployment is updated with the latest image
-
----
-
-## 📂 Project Structure
-
-```
-nodejs-ci-cd-kubernetes/
-├── .github/
-│   └── workflows/        # GitHub Actions CI/CD pipeline
-├── k8s/
-│   ├── deployment.yaml   # Kubernetes Deployment manifest
-│   └── service.yaml      # Kubernetes Service manifest
-├── app.js                # Node.js application
-├── Dockerfile            # Container image definition
-└── package.json          # Node.js dependencies
-```
-
----
-
-## 🚀 Run It Locally
-
-### 🔹 With Docker
+### Run with Docker
 
 ```bash
+# Clone the repository
 git clone https://github.com/Aijazkhan123/nodejs-ci-cd-kubernetes.git
 cd nodejs-ci-cd-kubernetes
-docker build -t nodejs-k8s-app .
-docker run -p 3000:3000 nodejs-k8s-app
+
+# Build Docker image
+docker build -t nodejs-ci-cd-kubernetes .
+
+# Run container
+docker run -p 3000:3000 nodejs-ci-cd-kubernetes
 ```
 
----
+Visit: **http://localhost:3000**
 
-### 🔹 Deploy to Kubernetes
+### Deploy to Kubernetes
 
 ```bash
+# Apply the deployment and service manifests
 kubectl apply -f k8s/deployment.yaml
 kubectl apply -f k8s/service.yaml
+
+# Check status
 kubectl get pods
 kubectl get services
 ```
 
----
-
-### 🔹 Without Docker
+### Run Locally (without Docker)
 
 ```bash
 npm install
@@ -109,25 +134,42 @@ node app.js
 
 ---
 
-## 📊 DevOps & Engineering Highlights
+## ⚙️ CI/CD Pipeline
 
-* 🔹 Designed and implemented a **complete CI/CD pipeline**
-* 🔹 Applied **containerization best practices using Docker**
-* 🔹 Deployed and managed workloads on **Kubernetes clusters**
-* 🔹 Simulated **real-world DevOps workflows used in production**
-* 🔹 Demonstrated understanding of **automation and scalability**
+On every `git push`, the GitHub Actions workflow:
 
----
-
-## 👨‍💻 Author
-
-**Aijaz Khan**
-🔗 GitHub: https://github.com/Aijazkhan123
+1. **Checks out** the source code
+2. **Installs** Node.js dependencies with `npm install`
+3. **Runs** tests with `npm test`
+4. **Builds** a Docker image
+5. **Pushes** the image to a container registry
+6. **Deploys** to Kubernetes with `kubectl apply`
 
 ---
 
-## ⭐ Support
+## 🧠 What I Learned
 
-If you find this project useful, consider giving it a ⭐ — it helps increase visibility and showcases your work to recruiters.
+- Deploying containerized Node.js apps on Kubernetes
+- Writing Kubernetes Deployment and Service manifests
+- Building full end-to-end CI/CD pipelines with GitHub Actions
+- Understanding pod scaling, rolling updates, and service networking in K8s
 
 ---
+
+## 🗺️ Planned Improvements
+
+- [ ] Add Kubernetes Horizontal Pod Autoscaler (HPA)
+- [ ] Set up Ingress with NGINX for domain routing
+- [ ] Add Helm chart for parameterized deployments
+- [ ] Integrate secrets management with Kubernetes Secrets / Vault
+- [ ] Add monitoring with Prometheus + Grafana
+
+---
+
+## 📜 License
+
+MIT License — free to fork, learn from, and build upon.
+
+---
+
+`Node.js` · `Docker` · `Kubernetes` · `GitHub Actions` · `CI/CD` · `DevOps` · `Container Orchestration`
