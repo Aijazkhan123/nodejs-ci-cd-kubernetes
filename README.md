@@ -10,7 +10,7 @@ A production-grade Node.js application with a complete CI/CD pipeline and Kubern
 ---
 
 ## 🏗️ Architecture Diagram
-
+https://chatgpt.com/s/m_69cb8acbc5488191b7eb4952badd46b7
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         FULL DEVOPS PIPELINE                            │
