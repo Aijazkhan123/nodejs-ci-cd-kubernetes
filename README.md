@@ -12,7 +12,7 @@
 
 ## 🏗️ Architecture
 
-![Architecture Diagram](architecture.png)
+<img width="1536" height="1024" alt="Image" src="https://github.com/user-attachments/assets/4f6bb370-b186-45e1-9a60-461374a76c0b" />
 
 ---
 
